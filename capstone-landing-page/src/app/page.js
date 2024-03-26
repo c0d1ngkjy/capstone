@@ -73,13 +73,13 @@ export default function Home() {
       </div>
 
       <div className="py-12 lg:py-20 flex flex-col lg:flex-row items-center justify-center bg-black w-full gap-10 mx-auto px-8">
-        <Card title="Free Plan" des="desasdasd">
+        <Card title="무료 플랜" des="대학생 플랫폼에 동아리 등록 및 홍보">
           <CanvasRevealEffect
             animationSpeed={5.1}
             containerClassName="bg-emerald-900"
           />
         </Card>
-        <Card title="Starter Plan" des="desasdasd">
+        <Card title="스타터 플랜" des="대학생 플랫폼에 동아리 등록 및 홍보. 동아리 부원 관리 및 등록.">
           <CanvasRevealEffect
             animationSpeed={3}
             containerClassName="bg-black"
@@ -92,7 +92,7 @@ export default function Home() {
           {/* Radial gradient for the cute fade */}
           <div className="absolute inset-0 [mask-image:radial-gradient(400px_at_center,white,transparent)] bg-black/50 dark:bg-black/90" />
         </Card>
-        <Card title="Pro Plan" des="desasdasd">
+        <Card title="프로 플랜" des="대학생 플랫폼에 동아리 등록 및 홍보. 동아리 부원 관리 및 등록. Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum">
           <CanvasRevealEffect
             animationSpeed={3}
             containerClassName="bg-sky-600"
@@ -107,7 +107,7 @@ export default function Home() {
             지금 바로 신청하세요.
           </p>
           <p className="text-base md:text-lg mt-4 text-white font-normal inter-var text-center">
-            The all-in-one platform for clubs and organizations. Simplify event management, streamline communication, and grow your membership.
+            동아리 관리를 위한 단 하나의 솔루션. 일정 관리를 간략화하고 동아리를 효율적으로 운영하세요.
           </p>
         </WavyBackground>
       </div>
