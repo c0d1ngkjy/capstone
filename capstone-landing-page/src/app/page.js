@@ -10,9 +10,41 @@ import { WavyBackground } from "../components/ui/wavy-background";
 
 
 export default function Home() {
+  const services = [
+    {
+      title: "부원 관리",
+      description:
+        "동아리 부원을 관리하세요. 부원 목록을 한눈에 보고 정리하세요. 부원 등록, 삭제, 정보 업데이트. 부원 연락처 관리 기능.",
+    },
+    {
+      title: "문의 관리",
+      description:
+        "동아리 부원들과 대학생들의 QnA를 관리자 콘솔에서 손쉽게 관리하세요. 질문 등록 및 답변 모듈.",
+    },
+    {
+      title: "가입 관리",
+      description:
+        "기존에 구글폼과 엑셀을 사용한 불편한 가입 관리는 그만. 하나의 플랫폼에서 손쉽게 동아리 부원을 모집하세요. 커스텀 신청서 제작 및 공유 기능. 신규 부원 수락 및 거절 기능.",
+    },
+    {
+      title: "일정 관리",
+      description:
+        "동아리 임원진들과 간편하게 일정을 조율하세요. 동아리 일정 저장 및 공유 기능.",
+    },
+    {
+      title: "과제 관리",
+      description:
+        "동아리 과제를 관리하세요. 과제 생성 및 제출 기능.",
+    },
+    {
+      title: "자동화 시스템",
+      description:
+        "동아리 일정 출석 관리 및 과제 확인 자동화 기능을 사용하세요.",
+    },
+  ];
   return (
     <main className="flex min-h-screen flex-col items-center  p-12 lg:p-24">
-      <div className="h-[40rem] w-full bg-black flex flex-col items-center justify-center overflow-hidden rounded-md">
+      <div className="h-[40rem] w-full min-h-screen bg-black flex flex-col items-center justify-center overflow-hidden rounded-md">
         <h1 className="md:text-4xl text-xl lg:text-6xl font-bold text-center text-white relative z-20">
           No.1 동아리 운영 플랫폼
         </h1>
@@ -114,39 +146,6 @@ export default function Home() {
     </main>
   );
 }
-
-export const services = [
-  {
-    title: "부원 관리",
-    description:
-      "동아리 부원을 관리하세요. 부원 목록을 한눈에 보고 정리하세요. 부원 등록, 삭제, 정보 업데이트. 부원 연락처 관리 기능.",
-  },
-  {
-    title: "문의 관리",
-    description:
-      "동아리 부원들과 대학생들의 QnA를 관리자 콘솔에서 손쉽게 관리하세요. 질문 등록 및 답변 모듈.",
-  },
-  {
-    title: "가입 관리",
-    description:
-      "기존에 구글폼과 엑셀을 사용한 불편한 가입 관리는 그만. 하나의 플랫폼에서 손쉽게 동아리 부원을 모집하세요. 커스텀 신청서 제작 및 공유 기능. 신규 부원 수락 및 거절 기능.",
-  },
-  {
-    title: "일정 관리",
-    description:
-      "동아리 임원진들과 간편하게 일정을 조율하세요. 동아리 일정 저장 및 공유 기능.",
-  },
-  {
-    title: "과제 관리",
-    description:
-      "동아리 과제를 관리하세요. 과제 생성 및 제출 기능.",
-  },
-  {
-    title: "자동화 시스템",
-    description:
-      "동아리 일정 출석 관리 및 과제 확인 자동화 기능을 사용하세요.",
-  },
-];
 
 export const Icon = ({ className, ...rest }) => {
   return (
