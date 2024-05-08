@@ -1,36 +1,41 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+  <q-layout view="lHh LpR lFf">
+    <q-header bordered class="bg-white text-black q-py-sm q-px-md">
+      <q-toolbar class="row justify-between">
+        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title>
-          여기모여
-        </q-toolbar-title>
-
-        <div>로그인</div>
+        <div class="row q-gutter-x-sm items-center">
+          <q-avatar class="shadow-3">
+            <img src="loginBG.png" alt="" />
+          </q-avatar>
+          <div>최하호</div>
+          <q-btn dense unelevated>
+            <q-icon name="keyboard_arrow_down" size="md" color="grey" />
+          </q-btn>
+        </div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
+    <q-drawer v-model="leftDrawerOpen" side="left" bordered>
+      <div class="row items-center q-gutter-x-sm q-pa-sm">
+        <img
+          width="50"
+          src="~assets/logo.svg"
+          style="
+            filter: invert(50%) sepia(35%) saturate(7492%) hue-rotate(222deg)
+              brightness(101%) contrast(102%);
+          "
         />
-      </q-list>
+        <div class="text-primary text-bold text-h5">여기모여</div>
+      </div>
+      <q-separator></q-separator>
+
+      <div class="q-pa-md bg-secondary">
+        현재 동아리
+      </div>
+      <q-separator></q-separator>
+
+      <div>NAVS</div>
     </q-drawer>
 
     <q-page-container>
@@ -39,62 +44,19 @@
   </q-layout>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+<script>
+import { ref } from "vue";
 
-defineOptions({
-  name: 'MainLayout'
-})
+export default {
+  setup() {
+    const leftDrawerOpen = ref(true);
 
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+    return {
+      leftDrawerOpen,
+      toggleLeftDrawer() {
+        leftDrawerOpen.value = !leftDrawerOpen.value;
+      },
+    };
   },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
-
-const leftDrawerOpen = ref(false)
-
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
-}
+};
 </script>
