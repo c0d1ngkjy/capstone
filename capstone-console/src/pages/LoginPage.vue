@@ -10,22 +10,36 @@
         </div>
       </div>
 
-      <div>
-        <q-btn @click="$router.push('/console')" class="q-mt-xl text-brown text-bold" size="lg" color="yellow">카카오 로그인</q-btn>
+      <div class="q-mt-xl">
+        <img class="cursor-pointer" @click="handleKakaoLogin" src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" width="222" alt="카카오 로그인 버튼" />
       </div>
     </div>
 
-    <img
-      class="fixed-bottom-right"
-      src="loginBG.png"
-      alt="background image"
-      width="640"
-    />
+    <img class="fixed-bottom-right" src="loginBG.png" alt="background image" width="640" />
   </q-page>
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
+import {useRoute} from 'vue-router'
+
 defineOptions({
   name: "LoginPage",
 });
+
+const $route = useRoute();
+
+function handleKakaoLogin() {
+  Kakao.Auth.authorize(
+    {
+      redirectUri: 'http://localhost:9000/oauth',
+    }
+  );
+}
+
+onMounted(() => {
+  Kakao.init('28beff42a42811b8f526dd8e29f2b9c5');
+  console.log(Kakao.isInitialized())
+  console.log($route.query)
+})
 </script>
