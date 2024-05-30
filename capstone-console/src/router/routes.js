@@ -13,8 +13,9 @@ const routes = [
     path: '/console',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/MembersPage.vue') },
+      { path: 'list', component: () => import('pages/MembersPage.vue') },
       { path: 'settings', component: () => import('pages/ClubPage.vue') },
+      { path: 'recruit', component: () => import('pages/RecruitPage.vue') },
     ]
   },
 

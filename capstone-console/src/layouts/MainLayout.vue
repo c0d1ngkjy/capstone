@@ -6,7 +6,7 @@
 
         <div class="row q-gutter-x-sm items-center">
           <q-avatar>
-            <img src="loginBG.png" alt="profile image" style="border: 1px solid lightgrey;" />
+            <img src="~assets/addClubIcon.svg" alt="profile image" style="border: 1px solid lightgrey;">
           </q-avatar>
           <div>최하호</div>
           <q-btn dense unelevated>
@@ -30,7 +30,7 @@
 
       <div class="q-px-md q-py-lg row items-center q-gutter-x-md">
         <q-avatar>
-          <img src="loginBG.png" alt="club image" style="border: 1px solid lightgrey;">
+          <img src="~assets/addClubIcon.svg" alt="club image" style="border: 1px solid lightgrey;">
         </q-avatar>
         <q-select class="col" borderless v-model="currentClub" :options="clubOptions"></q-select>
       </div>
@@ -38,7 +38,7 @@
 
       <div>
         <q-list class="q-py-sm">
-          <q-item clickable :active="currentNav == nav.name" @click="currentNav = nav.name" v-for="nav in navs"
+          <q-item clickable :active="currentNav == nav.name" @click="currentNav = nav.name; $router.push(`/console/${nav.link}`)" v-for="nav in navs"
             :key="nav" class="q-pa-md q-mx-md q-my-sm"
             :class="currentNav == nav.name ? 'text-primary bg-blue-grey-1' : 'text-grey'" style="border-radius: 10px;">
             <q-item-section avatar>
@@ -66,9 +66,9 @@ export default {
     const currentClub = ref(clubOptions.value[0])
 
     const navs = ref([
-      { name: '부원 목록', iconName: 'list' },
-      { name: '부원 모집', iconName: 'group' },
-      { name: '동아리 설정', iconName: 'settings' },
+      { name: '부원 목록', iconName: 'list', link: 'list' },
+      { name: '부원 모집', iconName: 'group',link: 'recruit'  },
+      { name: '동아리 설정', iconName: 'settings', link: 'settings'  },
     ])
     const currentNav = ref(navs.value[0].name)
 

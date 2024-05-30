@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-xl">
     <q-card flat style="border-radius: 10px;">
-      <q-table title="부원 목록" :rows="rows" :columns="columns" row-key="name" />
+      <q-table color="primary" title="부원 목록" :rows="rows" :columns="columns" row-key="name" />
     </q-card>
   </q-page>
 </template>

@@ -29,7 +29,7 @@
         <div>동아리 간단 소개 글 동아리 간단 소개 글 동아리 간단 소개 글 동아리 간단 소개 글 </div>
       </div>
 
-      <q-btn @click="$router.push('/console')" class="q-ml-md" unelevated size="md" color="primary" style="border-radius: 10px;">바로가기</q-btn>
+      <q-btn @click="$router.push('/console/list')" class="q-ml-md" unelevated size="md" color="primary" style="border-radius: 10px;">바로가기</q-btn>
     </q-card>
     <q-btn @click="$router.push('/newclub')" flat class="addClubBtn q-mt-md bg-grey-1 flex flex-center" style="min-height: 144px; border-radius: 10px;">
       <q-icon name="add" size="xl" color="grey"></q-icon>
