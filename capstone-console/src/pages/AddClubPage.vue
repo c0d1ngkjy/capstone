@@ -2,7 +2,7 @@
   <q-page class="column q-pa-xl">
     <div class="row items-center">
       <img src="~assets/addClubIcon.svg" alt="icon" class="q-mr-md">
-      <div class="text-h5 text-bold">동아리 생성하기</div>
+      <div class="text-h5 text-bold">동아리 등록하기</div>
     </div>
 
     <q-card style="border-radius: 10px;" flat class="q-pa-md q-mt-lg">
@@ -34,7 +34,7 @@
     </q-card>
 
     <div class="row justify-end">
-      <q-btn color="primary" style="border-radius: 10px;" class="q-mt-md" size="lg" unelevated>동아리 생성하기</q-btn>
+      <q-btn color="primary" style="border-radius: 10px;" class="q-mt-md" size="lg" unelevated>동아리 등록하기</q-btn>
     </div>
   </q-page>
 </template>
