@@ -1,22 +1,122 @@
 <template>
-  <q-page class="flex flex-center text-h1">
-   <div>AUTH PAGE</div>
-   <div class="text-h6 text-red">{{ kakaoCode }}</div>
+  <q-page class="flex flex-center">
+    <div>
+      <div class="text-bold text-h5 text-center q-mb-xl">회원가입을 위해 추가 정보를 입력해주세요</div>
+
+      <q-card flat style="border-radius: 12px; min-width: 500px;" class="q-pa-md column q-gutter-y-md">
+        <div>
+          <div class="text-bold q-mb-sm q-ml-sm">학교명</div>
+          <q-input v-model="schoolInput" borderless class="bg-blue-grey-1 q-px-lg" placeholder="Ex) 명지전문대학교"
+            style="border-radius: 10px;" />
+          <div v-if="schoolError" class="text-red text-caption q-ml-sm">{{ schoolError }}</div>
+        </div>
+
+        <div>
+          <div class="text-bold q-mb-sm q-ml-sm">학과명</div>
+          <q-input v-model="majorInput" borderless class="bg-blue-grey-1 q-px-lg" placeholder="Ex) 인터넷보안공학과"
+            style="border-radius: 10px;" />
+          <div v-if="majorError" class="text-red text-caption q-ml-sm">{{ majorError }}</div>
+        </div>
+
+        <div>
+          <div class="text-bold q-mb-sm q-ml-sm">학번</div>
+          <q-input v-model="studIdInput" borderless class="bg-blue-grey-1 q-px-lg" placeholder="Ex) 2022671067"
+            style="border-radius: 10px;" />
+          <div v-if="studIdError" class="text-red text-caption q-ml-sm">{{ studIdError }}</div>
+        </div>
+
+        <q-btn @click="register" icon="arrow_forward_ios" unelevated color="primary" style="border-radius: 12px;"
+          class="q-pa-md q-mt-xl text-bold" />
+      </q-card>
+    </div>
   </q-page>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
-import {useRoute} from 'vue-router'
+import { api } from 'src/boot/axios';
+import { onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
+import { useJwtStore } from 'stores/jwt-store'
 
 defineOptions({
   name: "AuthPage",
 });
 
 const $route = useRoute();
+const $router = useRouter()
+const jwtStore = useJwtStore()
 const kakaoCode = $route.query.code
+const $q = useQuasar()
+
+const schoolInput = ref('')
+const majorInput = ref('')
+const studIdInput = ref('')
+
+const schoolError = ref('')
+const majorError = ref('')
+const studIdError = ref('')
+
+const kakaoData = ref(null)
+
+function validateInputs() {
+  schoolError.value = !schoolInput.value ? '학교명을 입력해주세요' : '';
+  majorError.value = !majorInput.value ? '학과명을 입력해주세요' : '';
+  studIdError.value = !studIdInput.value ? '학번을 입력해주세요' : '';
+
+  if (studIdInput.value && !/^\d+$/.test(studIdInput.value.trim())) {
+    studIdError.value = '학번은 숫자로만 이루어져야 합니다';
+  }
+
+  return !schoolError.value && !majorError.value && !studIdError.value;
+}
+
+function register() {
+  if (!validateInputs()) {
+    return
+  }
+
+  api.post('/auth/register', {
+    school: schoolInput.value,
+    major: majorInput.value,
+    studentId: studIdInput.value,
+    id: kakaoData.value.id,
+    name: kakaoData.value.nickname,
+    email: kakaoData.value.email,
+    phone: kakaoData.value.phone
+  })
+    .then((res) => {
+      if (res) {
+        $q.notify({ message: '회원가입 성공', color: 'primary' })
+        console.log(res.data.user)
+        jwtStore.setToken(res.data.token)
+        $router.push('/myclubs')
+      }
+    })
+    .catch((e) => {
+      $q.notify({ message: '회원가입 에러', color: 'red' })
+    })
+}
+
+async function getKakaoUserData() {
+  api.post('/auth/kakao', { code: kakaoCode })
+    .then((res) => {
+      console.log(res.data)
+
+      if(res.status === 208) {
+        jwtStore.setToken(res.data.token)
+        console.log(jwtStore.token)
+        $router.push('/myclubs')
+      } else if (res.status === 200) {
+        kakaoData.value = res.data.kakaoUserInfo
+      }
+    })
+    .catch((e) => {
+      $q.notify({ message: '카카오 에러', color: 'red' })
+    })
+}
 
 onMounted(() => {
-  console.log($route.query)
+  getKakaoUserData()
 })
 </script>

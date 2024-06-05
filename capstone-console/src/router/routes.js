@@ -16,6 +16,9 @@ const routes = [
       { path: 'list', component: () => import('pages/MembersPage.vue') },
       { path: 'settings', component: () => import('pages/ClubPage.vue') },
       { path: 'recruit', component: () => import('pages/RecruitPage.vue') },
+      { path: 'event', component: () => import('pages/CalendarPage.vue') },
+      { path: 'dues', component: () => import('pages/DuesPage.vue') },
+
     ]
   },
 
