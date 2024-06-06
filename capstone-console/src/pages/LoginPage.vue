@@ -6,9 +6,10 @@
         <div class="text-h3 text-bold">동아리 운영 관리 서비스</div>
         <div class="row items-center">
           <div class="text-h2 text-bold">여기모여</div>
-          <img width="70" src="~assets/logo.svg" alt="" />
+          <img width="70" src="~assets/logo.svg" alt=""/>
         </div>
       </div>
+
       <div class="q-mt-xl">
         <img
           class="cursor-pointer"
@@ -41,6 +42,7 @@ const $route = useRoute();
 function handleKakaoLogin() {
   Kakao.Auth.authorize({
     redirectUri: "http://localhost:9000/oauth",
+    // prompts: 'login'
   });
 }
 

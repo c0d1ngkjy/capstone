@@ -1,23 +1,25 @@
 <template>
   <q-layout view="lHh LpR lFf">
+    <!-- Header -->
     <q-header bordered class="bg-white text-black q-py-sm q-px-md">
       <q-toolbar class="row justify-between">
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
+        <!-- Profile Information -->
         <div class="row q-gutter-x-sm items-center">
           <q-avatar>
             <img src="~assets/addClubIcon.svg" alt="profile image" style="border: 1px solid lightgrey" />
           </q-avatar>
           <div>최하호</div>
+          <!-- Profile Dropdown Menu -->
           <q-btn dense unelevated>
             <q-icon name="arrow_drop_down" size="sm" color="grey" />
             <q-menu transition-show="scale" transition-hide="scale">
               <q-list separator style="min-width: 120px;">
-                <q-item class="row items-center" clickable v-close-popup>
+                <q-item class="row items-center" clickable v-close-popup @click="$router.push('/console/userprofile')">
                   <q-icon name="person" class="q-mr-sm"></q-icon>
                   <q-item-section>프로필</q-item-section>
                 </q-item>
-
                 <q-item class="row items-center" clickable v-close-popup @click="handleLogout()">
                   <q-icon name="logout" class="q-mr-sm"></q-icon>
                   <q-item-section>로그아웃</q-item-section>
@@ -29,6 +31,7 @@
       </q-toolbar>
     </q-header>
 
+    <!-- Left Drawer -->
     <q-drawer v-model="leftDrawerOpen" side="left" bordered>
       <div class="row items-center q-gutter-x-sm q-pa-sm q-pl-lg">
         <div style="width: 50px; height: 50px" class="flex flex-center">
@@ -41,20 +44,27 @@
       </div>
       <q-separator></q-separator>
 
+      <!-- Club Selection -->
       <div class="q-px-md q-py-lg row items-center q-gutter-x-md">
         <q-avatar>
-          <img src="~assets/addClubIcon.svg" alt="club image" style="border: 1px solid lightgrey" />
+          <img :src="currentClub.image" alt="club image" style="border: 1px solid lightgrey" />
         </q-avatar>
-        <q-select class="col" borderless v-model="currentClub" :options="clubOptions"></q-select>
+
+        <q-select class="col" borderless v-model="currentClub" :options="clubOptions" option-label="name">
+          <template v-slot:selected>
+            {{ currentClub.name }}
+          </template>
+        </q-select>
       </div>
       <q-separator></q-separator>
 
+      <!-- Navigation Items -->
       <div>
         <q-list class="q-py-sm">
           <q-item clickable :active="currentNav === nav.link" @click="
           currentNav = nav.link;
         $router.push(`/console/${nav.link}`);
-        " v-for="nav in navs" :key="nav" class="q-pa-md q-mx-md q-my-sm" :class="currentNav == nav.link
+        " v-for="nav in navs" :key="nav.link" class="q-pa-md q-mx-md q-my-sm" :class="currentNav == nav.link
           ? 'text-primary bg-blue-grey-1'
           : 'text-grey'
           " style="border-radius: 10px">
@@ -67,6 +77,7 @@
       </div>
     </q-drawer>
 
+    <!-- Page Content -->
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -74,17 +85,24 @@
 </template>
 
 <script>
+import { api } from "src/boot/axios";
 import { useJwtStore } from "src/stores/jwt-store";
+import { useUserStore } from "src/stores/user-store";
 import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+
 export default {
   setup() {
     const $route = useRoute();
     const $router = useRouter();
+    const jwtStore = useJwtStore();
+    const userStore = useUserStore();
+    const token = jwtStore.token;
 
     const leftDrawerOpen = ref(true);
-    const clubOptions = ref(["클러비티", "보안동아리", "앱미사"]);
-    const currentClub = ref(clubOptions.value[0]);
+    const clubOptions = ref([]);
+    const currentClub = ref({});
+    const currentNav = ref("list");
 
     const navs = ref([
       { name: "부원 목록", iconName: "list", link: "list" },
@@ -93,35 +111,44 @@ export default {
       { name: "회비 내역", iconName: "receipt_long", link: "dues" },
       { name: "동아리 설정", iconName: "settings", link: "settings" },
     ]);
-    const currentNav = ref("list");
 
     watch($route, () => {
       currentNav.value = $route.path.split("/")[2];
-      console.log(currentNav.value);
+    });
+
+    watch(currentClub, (newValue, oldValue) => {
+      userStore.setCurrentClub(newValue);
+      console.log('Current club changed:', newValue);
     });
 
     onMounted(() => {
-      currentNav.value = $route.path.split("/")[2];
-      console.log(currentNav.value);
+      fetchClubList();
     });
 
-    const jwtStore = useJwtStore()
+    function fetchClubList() {
+      api.post('club/findAdmin', {}, { headers: { Authorization: token } }).then((res) => {
+        clubOptions.value = res.data.clubList;
+        currentClub.value = userStore.currentClub || res.data.clubList[0];
+      });
+    }
+
     function handleLogout() {
-      jwtStore.clearToken()
-      console.log(jwtStore.token)
-      $router.push('/')
+      jwtStore.clearToken();
+      $router.push('/');
+    }
+
+    function toggleLeftDrawer() {
+      leftDrawerOpen.value = !leftDrawerOpen.value;
     }
 
     return {
       leftDrawerOpen,
-      toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value;
-      },
+      toggleLeftDrawer,
       clubOptions,
       currentClub,
       navs,
       currentNav,
-      handleLogout
+      handleLogout,
     };
   },
 };

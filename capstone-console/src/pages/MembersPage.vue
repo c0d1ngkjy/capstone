@@ -1,20 +1,37 @@
 <template>
   <q-page>
-    <div class="row items-center q-pt-xl q-pl-xl">
-      <img src="~assets/userIcon.svg" alt="icon" class="q-mr-md" />
-      <div class="text-h5 text-bold">부원 목록</div>
+    <div class="row justify-between items-center q-px-xl q-pt-xl">
+      <div>
+        <div class="row items-center">
+          <img src="~assets/userIcon.svg" alt="icon" class="q-mr-md" />
+          <div class="text-h5 text-bold">부원 목록</div>
+        </div>
+        <div class="text-grey text-bold q-py-md">총??명</div>
+
+      </div>
+
+      <q-btn style="border-radius: 8px;" unelevated color="primary" icon="add" label="부원 추가" @click="addMemberDialog = true" />
     </div>
-    <div class="text-grey text-bold q-pa-md q-pl-xl">총??명</div>
     <q-separator></q-separator>
 
+    <q-dialog v-model="addMemberDialog">
+      <q-card class="q-pa-md">
+
+        <div>이름</div>
+        <q-input  placeholder="Ex) 김주윤" />
+
+        <div>역할</div>
+        <div>학교</div>
+        <div>전화번호</div>
+        <div>이메일</div>
+        <div>학번</div>
+
+      </q-card>
+    </q-dialog>
+
     <div>
-      <q-card
-        style="border-radius: 10px"
-        flat
-        v-for="row in rows"
-        :key="row"
-        class="row items-center justify-between q-my-md q-mx-xl q-pa-md"
-      >
+      <q-card style="border-radius: 10px" flat v-for="row in rows" :key="row"
+        class="row items-center justify-between q-my-md q-mx-xl q-pa-md">
         <div class="row items-center q-gutter-xs">
           <q-avatar size="md">
             <img src="~assets/userIcon.svg" alt="profile img" />
@@ -37,26 +54,32 @@
 </template>
 
 <script setup>
+import { api } from 'src/boot/axios';
+import { onMounted, ref } from 'vue';
+import { useUserStore } from 'stores/user-store'
+
 defineOptions({
   name: "IndexPage",
 });
 
-const columns = [
-  {
-    name: "name",
-    required: true,
-    label: "이름",
-    align: "left",
-    field: "name",
-    sortable: true,
-  },
-  { name: "role", label: "역할", field: "role", sortable: true },
-  { name: "school", label: "학교", field: "school", sortable: true },
-  { name: "phoneNumber", label: "휴대전화", field: "phoneNumber" },
-  { name: "email", label: "이메일", field: "email" },
-  { name: "studentId", label: "학번", field: "studentId" },
-];
+const userStore = useUserStore()
+const addMemberDialog = ref()
 
+function handleAddMember() {
+
+}
+
+function fetchData() {
+  api.post('user/findUser', {
+    clubId: userStore.currentClub.club_id
+  }).then((res) => {
+    console.log(res.data)
+  })
+}
+onMounted(() => {
+  fetchData()
+  console.log(userStore.currentClub)
+})
 const rows = [
   {
     name: "최하호",

@@ -1,4 +1,5 @@
 <template>
+  <!-- loading chu ga -->
   <q-page class="flex flex-center">
     <div>
       <div class="text-bold text-h5 text-center q-mb-xl">회원가입을 위해 추가 정보를 입력해주세요</div>
@@ -112,7 +113,7 @@ async function getKakaoUserData() {
       }
     })
     .catch((e) => {
-      $q.notify({ message: '카카오 에러', color: 'red' })
+      $q.notify({ message: '카카오 에러'+e, color: 'red' })
     })
 }
 

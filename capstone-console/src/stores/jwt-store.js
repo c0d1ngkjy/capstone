@@ -12,4 +12,5 @@ export const useJwtStore = defineStore('jwt', {
       this.token = null;
     },
   },
+  persist: true
 });
