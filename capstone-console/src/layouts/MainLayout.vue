@@ -123,6 +123,7 @@ export default {
 
     onMounted(() => {
       fetchClubList();
+      currentNav.value = $route.path.split("/")[2];
     });
 
     function fetchClubList() {
