@@ -5,7 +5,7 @@
     <q-card flat class="q-pa-md" style="border-radius: 12px; max-width: 900px;">
       <div  style="max-width: 500px;" class="q-mb-lg">
         <div class="q-ml-sm q-mb-sm">프로필</div>
-        <img src="~assets/userIcon.svg" width="150px" style="border-radius: 50%; border: 1px solid lightgrey;" />
+        <img :src="user.image" width="150px" style="border-radius: 50%; border: 1px solid lightgrey;" />
       </div>
 
       <div  style="max-width: 500px;">
@@ -44,19 +44,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { useUserStore } from 'src/stores/user-store';
+import { onMounted, ref } from 'vue';
 
 defineOptions({
   name: 'UserProfilePage'
 })
+const userStore = useUserStore()
 
-const user = ref({
-  name: '김주윤',
-  phone: '010-0000-0000',
-  school: '명지전문대',
-  major: '인보과',
-  image: null,
-  studentId: '123213',
-  email: 'mail'
+const user = ref({})
+onMounted(()=>{
+  user.value = userStore.userData
 })
 </script>

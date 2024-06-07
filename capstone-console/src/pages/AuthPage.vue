@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center">
-    <q-spinner v-model="loadingState" size="xl" color="primary" />
-    <div v-if="!loadingState">
+    <q-spinner v-if="loadingState" size="3em" color="primary" />
+    <div v-if="loadingState == false">
       <div class="text-bold text-h5 text-center q-mb-xl">회원가입을 위해 추가 정보를 입력해주세요</div>
 
       <q-card flat style="border-radius: 12px; min-width: 500px;" class="q-pa-md column q-gutter-y-md">
@@ -66,7 +66,7 @@ const jwtStore = useJwtStore()
 const userStore = useUserStore()
 const kakaoCode = $route.query.code
 const $q = useQuasar()
-const loadingState = ref(true)
+const loadingState = ref(false)
 
 const schoolInput = ref('')
 const majorInput = ref('')
@@ -105,9 +105,9 @@ function register() {
   kakaoData.value.email = emailInput.value || kakaoData.value.email;
 
   const svgString = toSvg(kakaoData.value.email, 100)
-  // Convert SVG string to base64
+  // svg -> base64
   const base64Svg = btoa(svgString)
-  // Set as data URL
+  // base64 -> dataurl
   const svgDataUrl = `data:image/svg+xml;base64,${base64Svg}`
 
   api.post('/auth/register', {
@@ -117,7 +117,8 @@ function register() {
     id: kakaoData.value.id,
     name: kakaoData.value.nickname,
     email: kakaoData.value.email,
-    phone: kakaoData.value.phone
+    phone: kakaoData.value.phone,
+    image: svgDataUrl
   })
     .then((res) => {
       if (res) {
@@ -136,14 +137,15 @@ function register() {
 }
 
 async function getKakaoUserData() {
+  loadingState.value = true
   api.post('/auth/kakao', { code: kakaoCode })
     .then((res) => {
       console.log(res.data)
 
       if (res.status === 208) {
         jwtStore.setToken(res.data.token)
-        // userStore.setUserData(res.data.userData) tell ha2o to add
-        // console.table(jwtStore.token, userStore.userData)
+        userStore.setUserData(res.data.user)
+        console.table(jwtStore.token, userStore.userData)
         loadingState.value = false
         $router.push('/myclubs')
       } else if (res.status === 200) {

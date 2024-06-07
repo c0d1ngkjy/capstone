@@ -6,12 +6,11 @@
 
         <div class="row q-gutter-x-sm items-center">
           <q-avatar>
-            <img src="~assets/userIcon.svg" alt="profile image" style="border: 1px solid lightgrey" />
+            <img :src="userData.image" alt="profile image" style="border: 1px solid lightgrey" />
           </q-avatar>
           <!-- Profile Dropdown Menu -->
           <q-btn dense unelevated>
-            <!-- <div>{{userData.name}}</div> -->
-            <div>userData.name</div>
+            <div>{{userData.name}}</div>
             <q-icon name="arrow_drop_down" size="sm" color="grey" />
             <q-menu transition-show="scale" transition-hide="scale" style="border-radius: 12px;">
               <q-list separator style="min-width: 120px;">
@@ -98,7 +97,7 @@ export default {
     const jwtStore = useJwtStore();
     const userStore = useUserStore();
     const token = jwtStore.token;
-    const userData = userStore.userData
+    const userData = ref({})
 
     const leftDrawerOpen = ref(true);
     const clubOptions = ref([]);
@@ -125,6 +124,7 @@ export default {
     onMounted(() => {
       fetchClubList();
       currentNav.value = $route.path.split("/")[2];
+      userData.value = userStore.userData
     });
 
     function fetchClubList() {
@@ -151,6 +151,7 @@ export default {
       navs,
       currentNav,
       handleLogout,
+      userData
     };
   },
 };

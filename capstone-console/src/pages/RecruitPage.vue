@@ -20,7 +20,7 @@
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 10px;
             border-top-right-radius: 10px;
-            min-height: 184px;
+            min-height: 160px;
           "
         >
           <q-icon name="add" size="xl" color="grey" />
@@ -53,7 +53,7 @@
               {{ new Date().toLocaleDateString() }} ~
               {{ new Date().toLocaleDateString() }}
             </div>
-            <div
+            <!-- <div
               class="text-red text-bold q-pa-md flex flex-center text-center"
               style="
                 width: 100px;
@@ -65,7 +65,7 @@
             >
               10명 <br />
               지원중
-            </div>
+            </div> -->
           </div>
         </div>
       </q-card>
