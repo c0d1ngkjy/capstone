@@ -1,18 +1,11 @@
 <template>
   <q-page>
     <div class="row justify-between items-center q-px-xl q-pt-xl">
-      <div>
-        <div class="row items-center">
-          <q-icon name="list" size="xl" class="q-mr-md" />
-          <div class="text-h5 text-bold">부원 목록</div>
-        </div>
-        <div class="text-grey text-bold q-py-md">부원 {{ memberList.length }}명</div>
-      </div>
+      <div class="text-black text-subtitle1 text-bold q-py-md">부원 {{ memberList.length }}명</div>
 
       <q-btn style="border-radius: 8px;" unelevated color="primary" icon="add" label="부원 추가"
         @click="addMemberDialog = true" />
     </div>
-    <q-separator></q-separator>
 
     <q-dialog v-model="addMemberDialog">
       <q-card class="q-pa-lg" style="min-width: 500px; border-radius: 12px;">

@@ -8,7 +8,7 @@
         <!-- Profile Information -->
         <div class="row q-gutter-x-sm items-center">
           <q-avatar>
-            <img src="~assets/addClubIcon.svg" alt="profile image" style="border: 1px solid lightgrey" />
+            <img src="~assets/userIcon.svg" alt="profile image" style="border: 1px solid lightgrey" />
           </q-avatar>
           <div>최하호</div>
           <!-- Profile Dropdown Menu -->
@@ -47,7 +47,8 @@
       <!-- Club Selection -->
       <div class="q-px-md q-py-lg row items-center q-gutter-x-md">
         <q-avatar>
-          <img :src="currentClub.image" alt="club image" style="border: 1px solid lightgrey" />
+          <img v-if="currentClub.image" :src="currentClub.image" alt="club image" style="border: 1px solid lightgrey" />
+          <img v-else src="~assets/addClubIcon.svg" alt="icon img" style="border: 1px solid lightgrey;">
         </q-avatar>
 
         <q-select class="col" borderless v-model="currentClub" :options="clubOptions" option-label="name">

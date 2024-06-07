@@ -19,6 +19,8 @@ const routes = [
       { path: 'recruit', component: () => import('pages/RecruitPage.vue') },
       { path: 'event', component: () => import('pages/CalendarPage.vue') },
       { path: 'dues', component: () => import('pages/DuesPage.vue') },
+      { path: 'recruit/createform', component: () => import('pages/CreateFormPage.vue') },
+
 
     ]
   },

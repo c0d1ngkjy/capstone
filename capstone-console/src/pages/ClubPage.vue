@@ -1,11 +1,11 @@
 <template>
   <q-page class="column q-pa-xl">
-    <div class="row items-center">
+    <!-- <div class="row items-center">
       <img src="~assets/addClubIcon.svg" alt="icon" class="q-mr-md">
       <div class="text-h5 text-bold">동아리 정보 수정하기</div>
-    </div>
+    </div> -->
 
-    <q-card style="border-radius: 10px;" flat class="q-pa-md q-mt-lg">
+    <q-card style="border-radius: 10px;" flat class="q-pa-md">
       <div class="row items-center q-mb-sm">
         <div class="text-h6">동아리 이름</div>
         <div class="q-ml-sm text-caption text-grey">이름을 입력해주세요</div>
@@ -54,7 +54,7 @@
     </q-card>
 
     <div class="row justify-end">
-      <q-btn @click="handleUpdateClub()" color="primary" style="border-radius: 10px;" class="q-mt-md" size="lg" unelevated>저장하기</q-btn>
+      <q-btn @click="handleUpdateClub()" color="primary" style="border-radius: 10px;" class="q-mt-md" size="lg" unelevated>수정하기</q-btn>
     </div>
   </q-page>
 </template>

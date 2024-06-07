@@ -1,18 +1,18 @@
 <template>
   <q-page class="column q-pa-xl">
-    <div class="row items-center">
+    <!-- <div class="row items-center">
       <img src="~assets/userIcon.svg" alt="icon" class="q-mr-md" />
       <div class="text-bold text-h5">부원 모집</div>
-    </div>
+    </div> -->
 
-    <div class="flex q-gutter-xl q-mt-xs">
+    <div class="flex q-gutter-xl">
       <q-card
         flat
         class="column bg-primary"
         style="width: 340px; padding-left: 10px; border-radius: 10px"
       >
         <q-btn
-          @click="$router.push('/createform')"
+          @click="$router.push('/console/recruit/createform')"
           flat
           class="q-pa-md bg-grey-1 flex flex-center"
           style="
