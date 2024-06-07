@@ -1,18 +1,17 @@
 <template>
   <q-layout view="lHh LpR lFf">
-    <!-- Header -->
     <q-header bordered class="bg-white text-black q-py-sm q-px-md">
       <q-toolbar class="row justify-between">
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
-        <!-- Profile Information -->
         <div class="row q-gutter-x-sm items-center">
           <q-avatar>
             <img src="~assets/userIcon.svg" alt="profile image" style="border: 1px solid lightgrey" />
           </q-avatar>
-          <div>최하호</div>
           <!-- Profile Dropdown Menu -->
           <q-btn dense unelevated>
+            <!-- <div>{{userData.name}}</div> -->
+            <div>userData.name</div>
             <q-icon name="arrow_drop_down" size="sm" color="grey" />
             <q-menu transition-show="scale" transition-hide="scale" style="border-radius: 12px;">
               <q-list separator style="min-width: 120px;">
@@ -99,6 +98,7 @@ export default {
     const jwtStore = useJwtStore();
     const userStore = useUserStore();
     const token = jwtStore.token;
+    const userData = userStore.userData
 
     const leftDrawerOpen = ref(true);
     const clubOptions = ref([]);

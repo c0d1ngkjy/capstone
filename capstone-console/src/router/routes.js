@@ -7,6 +7,7 @@ const routes = [
       { path: 'oauth', component: () => import('pages/AuthPage.vue') },
       { path: 'myclubs', component: () => import('pages/IndexPage.vue') },
       { path: 'newclub', component: () => import('pages/AddClubPage.vue') },
+      { path: 'test', component: () => import('pages/TestPage.vue') },
     ]
   },
   {

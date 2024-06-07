@@ -5,34 +5,57 @@
       <div class="text-bold q-ml-sm q-mb-sm q-mt-md">
         신청서 제목
       </div>
-      <q-input borderless class="bg-blue-grey-1 q-px-md" style="border-radius: 12px;" type="text" />
+      <q-input
+        v-model="form.title"
+        borderless
+        class="bg-blue-grey-1 q-px-md"
+        style="border-radius: 12px;"
+        type="text"
+      />
+      <div v-if="errors.title" class="text-red q-ml-sm">{{ errors.title }}</div>
+
 
       <div class="text-bold q-ml-sm q-mb-sm q-mt-md">
-        모집 기간 : {{ dateRange.from }} ~ {{ dateRange.to }}
+        모집 기간 : {{ form.dateRange.from }} ~ {{ form.dateRange.to }}
       </div>
-      <q-date landscape :locale="locale" style="border-radius: 12px;" range v-model="dateRange"></q-date>
+      <q-date
+        landscape
+        :locale="locale"
+        style="border-radius: 12px;"
+        range
+        v-model="form.dateRange"
+        :error="!!errors.dateRange"
+      />
+      <div v-if="errors.dateRange" class="text-red q-ml-sm">{{ errors.dateRange }}</div>
 
-      <div v-for="question in questionList" :key="question">
+      <div v-for="question in form.questionList" :key="question">
         <div class="text-bold q-ml-sm q-mb-sm q-mt-md">
           {{ question }}
         </div>
         <q-input borderless class="bg-blue-grey-1" style="border-radius: 12px;" disable type="" />
       </div>
-      <q-btn class="q-mt-md q-py-sm q-px-md" color="primary" unelevated style="border-radius: 12px; max-width: 130px;"
-        @click="addQuestionDialog = true">질문 추가하기</q-btn>
+      <q-btn class="q-mt-md q-py-sm q-px-md" color="primary" unelevated style="border-radius: 12px; max-width: 130px;" @click="addQuestionDialog = true">
+        질문 추가하기
+      </q-btn>
     </q-card>
 
-    <q-btn color="primary" size="lg" class="q-my-md float-right" unelevated style="border-radius: 12px;">신청서
-      저장하기</q-btn>
+    <q-btn @click="handleAddForm" color="primary" size="lg" class="q-my-md float-right" unelevated style="border-radius: 12px;">
+      신청서 저장하기
+    </q-btn>
 
     <q-dialog v-model="addQuestionDialog">
       <q-card style="border-radius: 12px; min-width: 500px;" class="q-pa-md">
-        <q-input borderless class="bg-blue-grey-1 q-px-md" style="border-radius: 12px;" v-model="newQuestion"
-          type="text" label="질문" placeholder="지원동기가 무엇인가요?" />
-        <q-btn class="q-mt-md fit" color="primary" unelevated style="border-radius: 12px;" icon="add"
-          @click="addQuestion" />
+        <q-input
+          borderless
+          class="bg-blue-grey-1 q-px-md"
+          style="border-radius: 12px;"
+          v-model="newQuestion"
+          type="text"
+          label="질문"
+          placeholder="지원동기가 무엇인가요?"
+        />
+        <q-btn class="q-mt-md fit" color="primary" unelevated style="border-radius: 12px;" icon="add" @click="addQuestion" />
       </q-card>
-
     </q-dialog>
   </q-page>
 </template>
@@ -43,17 +66,38 @@ import { ref } from 'vue';
 defineOptions({
   name: 'CreateFormPage'
 })
-const questionList = ref([])
-
 
 const addQuestionDialog = ref(false)
-const newQuestion = ref()
-const dateRange = ref({})
+const newQuestion = ref("")
+const form = ref({
+  title: "",
+  dateRange: { from: '', to: '' },
+  questionList: []
+})
+
+const errors = ref({})
 
 function addQuestion() {
-  questionList.value.push(newQuestion.value)
+  form.value.questionList.push(newQuestion.value)
   addQuestionDialog.value = false
   newQuestion.value = ""
+}
+
+function handleAddForm() {
+  errors.value = {}
+
+  if (!form.value.title) {
+    errors.value.title = '신청서 제목을 입력해주세요.'
+  }
+
+  if (!form.value.dateRange.from || !form.value.dateRange.to) {
+    errors.value.dateRange = '모집 기간을 입력해주세요.'
+  }
+
+  if (Object.keys(errors.value).length === 0) {
+    console.log(form.value)
+    // Submit the form or perform desired actions
+  }
 }
 
 const locale = {

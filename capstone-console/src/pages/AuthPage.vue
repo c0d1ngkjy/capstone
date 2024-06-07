@@ -1,6 +1,7 @@
 <template>
   <q-page class="flex flex-center">
-    <div>
+    <q-spinner v-model="loadingState" size="xl" color="primary" />
+    <div v-if="!loadingState">
       <div class="text-bold text-h5 text-center q-mb-xl">회원가입을 위해 추가 정보를 입력해주세요</div>
 
       <q-card flat style="border-radius: 12px; min-width: 500px;" class="q-pa-md column q-gutter-y-md">
@@ -52,6 +53,8 @@ import { onBeforeMount, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { useJwtStore } from 'stores/jwt-store'
+import { useUserStore } from 'stores/user-store'
+import { toSvg } from 'jdenticon'
 
 defineOptions({
   name: "AuthPage",
@@ -60,8 +63,10 @@ defineOptions({
 const $route = useRoute();
 const $router = useRouter()
 const jwtStore = useJwtStore()
+const userStore = useUserStore()
 const kakaoCode = $route.query.code
 const $q = useQuasar()
+const loadingState = ref(true)
 
 const schoolInput = ref('')
 const majorInput = ref('')
@@ -95,9 +100,15 @@ function register() {
   if (!validateInputs()) {
     return
   }
-
+  loadingState.value = true
   kakaoData.value.phone = phoneInput.value || kakaoData.value.phone;
   kakaoData.value.email = emailInput.value || kakaoData.value.email;
+
+  const svgString = toSvg(kakaoData.value.email, 100)
+  // Convert SVG string to base64
+  const base64Svg = btoa(svgString)
+  // Set as data URL
+  const svgDataUrl = `data:image/svg+xml;base64,${base64Svg}`
 
   api.post('/auth/register', {
     school: schoolInput.value,
@@ -112,7 +123,10 @@ function register() {
       if (res) {
         $q.notify({ message: '회원가입 성공', color: 'primary' })
         console.log(res.data.user)
+        userStore.setUserData(res.data.user)
+        console.log(userStore.userData)
         jwtStore.setToken(res.data.token)
+        loadingState.value = false
         $router.push('/myclubs')
       }
     })
@@ -128,13 +142,17 @@ async function getKakaoUserData() {
 
       if (res.status === 208) {
         jwtStore.setToken(res.data.token)
-        console.log(jwtStore.token)
+        // userStore.setUserData(res.data.userData) tell ha2o to add
+        // console.table(jwtStore.token, userStore.userData)
+        loadingState.value = false
         $router.push('/myclubs')
       } else if (res.status === 200) {
         kakaoData.value = res.data.kakaoUserInfo
+        loadingState.value = false
       }
     })
     .catch((e) => {
+      // $q.notify({ message: '카카오 에러', color: 'red' })
       $q.notify({ message: '카카오 에러' + e, color: 'red' })
     })
 }

@@ -26,6 +26,10 @@
           </q-item-section>
         </q-item>
 
+        <q-item v-if="sortedDueList.length == 0" class="text-bold text-subtitle1 text-grey">
+          회비 내역이 존재하지 않습니다
+        </q-item>
+
         <q-item v-for="(due, index) in sortedDueList" :key="index">
           <q-item-section>
             <q-item-label>
