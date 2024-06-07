@@ -14,7 +14,7 @@
           <!-- Profile Dropdown Menu -->
           <q-btn dense unelevated>
             <q-icon name="arrow_drop_down" size="sm" color="grey" />
-            <q-menu transition-show="scale" transition-hide="scale">
+            <q-menu transition-show="scale" transition-hide="scale" style="border-radius: 12px;">
               <q-list separator style="min-width: 120px;">
                 <q-item class="row items-center" clickable v-close-popup @click="$router.push('/console/userprofile')">
                   <q-icon name="person" class="q-mr-sm"></q-icon>

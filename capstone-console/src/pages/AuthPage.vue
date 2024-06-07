@@ -1,5 +1,4 @@
 <template>
-  <!-- loading chu ga -->
   <q-page class="flex flex-center">
     <div>
       <div class="text-bold text-h5 text-center q-mb-xl">회원가입을 위해 추가 정보를 입력해주세요</div>
@@ -26,6 +25,20 @@
           <div v-if="studIdError" class="text-red text-caption q-ml-sm">{{ studIdError }}</div>
         </div>
 
+        <div v-if="!kakaoData.phone">
+          <div class="text-bold q-mb-sm q-ml-sm">전화번호</div>
+          <q-input v-model="phoneInput" borderless class="bg-blue-grey-1 q-px-lg" placeholder="Ex) 01075539005"
+            style="border-radius: 10px;" />
+          <div v-if="phoneError" class="text-red text-caption q-ml-sm">{{ phoneError }}</div>
+        </div>
+
+        <div v-if="!kakaoData.email">
+          <div class="text-bold q-mb-sm q-ml-sm">이메일</div>
+          <q-input v-model="emailInput" borderless class="bg-blue-grey-1 q-px-lg" placeholder="Ex) 123a@gmail.com"
+            style="border-radius: 10px;" />
+          <div v-if="emailError" class="text-red text-caption q-ml-sm">{{ emailError }}</div>
+        </div>
+
         <q-btn @click="register" icon="arrow_forward_ios" unelevated color="primary" style="border-radius: 12px;"
           class="q-pa-md q-mt-xl text-bold" />
       </q-card>
@@ -35,7 +48,7 @@
 
 <script setup>
 import { api } from 'src/boot/axios';
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { useJwtStore } from 'stores/jwt-store'
@@ -57,25 +70,34 @@ const studIdInput = ref('')
 const schoolError = ref('')
 const majorError = ref('')
 const studIdError = ref('')
+const phoneError = ref('')
+const emailError = ref('')
 
-const kakaoData = ref(null)
+const kakaoData = ref({ email: '', phone: '', id: '', nickname: '' })
+const phoneInput = ref('')
+const emailInput = ref('')
 
 function validateInputs() {
   schoolError.value = !schoolInput.value ? '학교명을 입력해주세요' : '';
   majorError.value = !majorInput.value ? '학과명을 입력해주세요' : '';
   studIdError.value = !studIdInput.value ? '학번을 입력해주세요' : '';
+  emailError.value = !emailInput.value ? '이메일을 입력해주세요' : '';
+  phoneError.value = !phoneInput.value ? '전화번호를 입력해주세요' : '';
 
   if (studIdInput.value && !/^\d+$/.test(studIdInput.value.trim())) {
     studIdError.value = '학번은 숫자로만 이루어져야 합니다';
   }
 
-  return !schoolError.value && !majorError.value && !studIdError.value;
+  return !schoolError.value && !majorError.value && !studIdError.value && !phoneError.value && !emailError.value;
 }
 
 function register() {
   if (!validateInputs()) {
     return
   }
+
+  kakaoData.value.phone = phoneInput.value || kakaoData.value.phone;
+  kakaoData.value.email = emailInput.value || kakaoData.value.email;
 
   api.post('/auth/register', {
     school: schoolInput.value,
@@ -104,7 +126,7 @@ async function getKakaoUserData() {
     .then((res) => {
       console.log(res.data)
 
-      if(res.status === 208) {
+      if (res.status === 208) {
         jwtStore.setToken(res.data.token)
         console.log(jwtStore.token)
         $router.push('/myclubs')
@@ -113,11 +135,11 @@ async function getKakaoUserData() {
       }
     })
     .catch((e) => {
-      $q.notify({ message: '카카오 에러'+e, color: 'red' })
+      $q.notify({ message: '카카오 에러' + e, color: 'red' })
     })
 }
 
-onMounted(() => {
+onBeforeMount(() => {
   getKakaoUserData()
 })
 </script>

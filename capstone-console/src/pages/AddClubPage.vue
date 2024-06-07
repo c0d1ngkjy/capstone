@@ -12,6 +12,7 @@
       </div>
       <q-input v-model="nameInput" borderless class="bg-blue-grey-1 q-px-lg" placeholder="Ex) 보안 동아리"
         style="border-radius: 10px;" />
+      <div v-if="nameError" class="text-negative q-ml-sm">{{ nameError }}</div>
     </q-card>
 
     <q-card style="border-radius: 10px;" flat class="q-pa-md q-mt-lg">
@@ -21,6 +22,7 @@
       </div>
       <q-input v-model="schoolInput" borderless class="bg-blue-grey-1 q-px-lg" placeholder="Ex) 명지전문대학교"
         style="border-radius: 10px;" />
+      <div v-if="schoolError" class="text-negative q-ml-sm">{{ schoolError }}</div>
     </q-card>
 
     <q-card style="border-radius: 10px;" flat class="q-pa-md q-mt-lg">
@@ -30,6 +32,7 @@
       </div>
       <q-input v-model="locationInput" borderless class="bg-blue-grey-1 q-px-lg" placeholder="Ex) 공318호"
         style="border-radius: 10px;" />
+      <div v-if="locationError" class="text-negative q-ml-sm">{{ locationError }}</div>
     </q-card>
 
     <q-card style="border-radius: 10px;" flat class="q-pa-md q-mt-lg">
@@ -38,9 +41,9 @@
         <div class="q-ml-sm text-caption text-grey">동아리의 로고 또는 프로필 이미지를 업로드해 주세요</div>
       </div>
       <div class="row items-end q-pa-md">
-        <img :src="imageUrl" alt="" style="width: 250px; height: 250px; border-radius: 50%; border: 1px solid lightgrey;"
-          v-if="imageUrl">
-        <input type="file" @change="onFileChange" accept="image/*" style="display: none;" ref="fileInput">
+        <img :src="imageUrl" alt=""
+          style="width: 250px; height: 250px; border-radius: 50%; border: 1px solid lightgrey;" v-if="imageUrl">
+        <input type="file" @change="onFileChange" accept="image/png, image/jpeg" style="display: none;" ref="fileInput">
         <q-btn color="grey" rounded unelevated @click="triggerFileInput">파일 업로드</q-btn>
       </div>
     </q-card>
@@ -51,7 +54,8 @@
         <div class="q-ml-sm text-caption text-grey">무엇을 하는 동아리인가요?</div>
       </div>
       <q-input v-model="desInput" borderless class="bg-blue-grey-1 q-px-lg" placeholder="Ex) 소프트웨어 보안 및 개발 동아리"
-        style="border-radius: 10px;" />
+        style="border-radius: 10px;"  />
+      <div v-if="desError" class="text-negative q-ml-sm">{{ desError }}</div>
     </q-card>
 
     <div class="row justify-end">
@@ -78,14 +82,51 @@ const userStore = useUserStore()
 const $q = useQuasar()
 const $router = useRouter()
 
-const nameInput = ref()
-const desInput = ref()
-const schoolInput = ref()
-const locationInput = ref()
+const nameInput = ref('')
+const desInput = ref('')
+const schoolInput = ref('')
+const locationInput = ref('')
 const imageFile = ref(null)
 const imageUrl = ref('')
 
+const nameError = ref('')
+const desError = ref('')
+const schoolError = ref('')
+const locationError = ref('')
+
 const fileInput = ref(null)
+
+function validateFields() {
+  let isValid = true
+  if (!nameInput.value) {
+    nameError.value = '동아리 이름을 입력해주세요.'
+    isValid = false
+  } else {
+    nameError.value = ''
+  }
+
+  if (!schoolInput.value) {
+    schoolError.value = '소속 학교를 입력해주세요.'
+    isValid = false
+  } else {
+    schoolError.value = ''
+  }
+
+  if (!locationInput.value) {
+    locationError.value = '동아리실 위치를 입력해주세요.'
+    isValid = false
+  } else {
+    locationError.value = ''
+  }
+
+  if (!desInput.value) {
+    desError.value = '한줄 설명을 입력해주세요.'
+    isValid = false
+  } else {
+    desError.value = ''
+  }
+  return isValid
+}
 
 function onFileChange(event) {
   const file = event.target.files[0]
@@ -100,6 +141,10 @@ function triggerFileInput() {
 }
 
 async function submit() {
+  if (!validateFields()) {
+    return
+  }
+
   try {
     const clubData = {
       name: nameInput.value,
@@ -123,7 +168,7 @@ async function submit() {
             message: '동아리 생성 완료',
             color: 'positive'
           })
-          console.log(imgRes.clubData)
+          console.log(imgRes)
           userStore.setCurrentClub(imgRes.clubData)
           $router.push('/console/list')
         } else {
@@ -142,7 +187,7 @@ async function submit() {
     }
   } catch (error) {
     $q.notify({
-      message: '동아리 등록 에러'+error,
+      message: '동아리 등록 에러' + error,
       color: 'negative'
     })
   }
