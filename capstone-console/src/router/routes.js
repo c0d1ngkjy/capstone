@@ -7,6 +7,8 @@ const routes = [
       { path: 'oauth', component: () => import('pages/AuthPage.vue') },
       { path: 'myclubs', component: () => import('pages/IndexPage.vue') },
       { path: 'newclub', component: () => import('pages/AddClubPage.vue') },
+      { path: 'recruit/form/:fid', component: () => import('pages/ViewFormPage.vue') },
+
       // { path: 'test', component: () => import('pages/TestPage.vue') },
     ]
   },
@@ -21,8 +23,6 @@ const routes = [
       { path: 'event', component: () => import('pages/CalendarPage.vue') },
       { path: 'dues', component: () => import('pages/DuesPage.vue') },
       { path: 'recruit/createform', component: () => import('pages/CreateFormPage.vue') },
-
-
     ]
   },
 

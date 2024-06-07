@@ -106,8 +106,8 @@ export default {
 
     const navs = ref([
       { name: "부원 목록", iconName: "list", link: "list" },
-      { name: "부원 모집", iconName: "group", link: "recruit" },
       { name: "동아리 일정", iconName: "event", link: "event" },
+      { name: "부원 모집", iconName: "group", link: "recruit" },
       { name: "회비 내역", iconName: "receipt_long", link: "dues" },
       { name: "동아리 설정", iconName: "settings", link: "settings" },
     ]);
