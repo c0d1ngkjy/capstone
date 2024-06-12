@@ -15,7 +15,7 @@
       </q-card>
 
       <q-card flat v-for="application in applicationList" :key="application.application_id" class="column bg-primary cursor-pointer"
-        style="width: 340px; padding-left: 10px; border-radius: 10px" @click="$router.push(`/console/recruit/viewforms/${application.application_id}`)">
+        style="width: 340px; padding-left: 10px; border-radius: 10px">
         <div class="column justify-between bg-white q-pa-md" style="
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
@@ -28,6 +28,9 @@
             <q-btn unelevated class="col-1 text-grey" icon="more_horiz">
               <q-menu transition-show="scale" transition-hide="scale" style="border-radius: 12px;">
                 <q-list separator style="min-width: 120px;">
+                  <q-item clickable v-close-popup @click="$router.push(`/console/recruit/viewforms/${application.application_id}`)">
+                    <q-item-section class="text-primary">가입신청서 목록보기</q-item-section>
+                  </q-item>
                   <q-item clickable v-close-popup @click="handleRenderApplication(application)">
                     <q-item-section>미리보기</q-item-section>
                   </q-item>
@@ -55,7 +58,7 @@
     <q-dialog v-model="shareDialog">
       <q-card class="q-pa-md" style="border-radius: 12px;">
         <q-card-section class="row q-gutter-md items-center">
-          <div ref="shareLinkRef" class="col" style="overflow: auto;">https://capstone-37552.web.app//recruit/form/{{ shareLink }}</div>
+          <div ref="shareLinkRef" class="col" style="overflow: auto;">http://localhost:9000/recruit/form/{{ shareLink }}</div>
 
           <q-icon name="content_copy" class="cursor-pointer col-1" @click="copyLink" />
         </q-card-section>
