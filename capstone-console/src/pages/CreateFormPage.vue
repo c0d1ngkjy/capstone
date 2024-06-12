@@ -75,7 +75,7 @@ const newQuestion = ref("")
 const form = ref({
   title: "",
   dateRange: { from: '', to: '' },
-  questionList: ["이름을 입력햐주세요", "학교를 입력해주세요", "학과를 입력해주세요", "학번을 입력해주세요", "전화번호를 입력해주세요", "이메일을 입력해주세요"]
+  questionList: ["이름을 입력해주세요", "학교를 입력해주세요", "학과를 입력해주세요", "학번을 입력해주세요", "전화번호를 입력해주세요", "이메일을 입력해주세요"]
 })
 
 const errors = ref({})
