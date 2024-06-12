@@ -10,7 +10,7 @@
           </q-avatar>
           <!-- Profile Dropdown Menu -->
           <q-btn dense unelevated>
-            <div>{{userData.name}}</div>
+            <div>{{ userData.name }}</div>
             <q-icon name="arrow_drop_down" size="sm" color="grey" />
             <q-menu transition-show="scale" transition-hide="scale" style="border-radius: 12px;">
               <q-list separator style="min-width: 120px;">
@@ -51,7 +51,12 @@
 
         <q-select class="col" borderless v-model="currentClub" :options="clubOptions" option-label="name">
           <template v-slot:selected>
-            {{ currentClub.name }}
+            <div>
+              {{ currentClub.name }}
+            </div>
+            <div class="text-caption text-grey-7" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+              {{ currentClub.description }}
+            </div>
           </template>
         </q-select>
       </div>

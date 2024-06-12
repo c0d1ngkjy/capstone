@@ -1,10 +1,5 @@
 <template>
   <q-page class="column q-pa-xl">
-    <!-- <div class="row items-center">
-      <img src="~assets/addClubIcon.svg" alt="icon" class="q-mr-md">
-      <div class="text-h5 text-bold">동아리 정보 수정하기</div>
-    </div> -->
-
     <q-card style="border-radius: 10px;" flat class="q-pa-md">
       <div class="row items-center q-mb-sm">
         <div class="text-h6">동아리 이름</div>

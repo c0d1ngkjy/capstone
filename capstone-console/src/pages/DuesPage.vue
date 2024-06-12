@@ -37,17 +37,18 @@
             </q-item-label>
           </q-item-section>
           <q-item-section>
-            <q-item-label>{{due.title}}</q-item-label>
+            <q-item-label>{{ due.history }}</q-item-label>
           </q-item-section>
           <q-item-section>
-            {{due.description || null}}
+            {{ due.description || null }}
           </q-item-section>
           <q-item-section>
-            {{ due.date }}
+            {{ due.receiptDate }}
           </q-item-section>
-          <q-item-section>{{due.cost}} 원</q-item-section>
+          <q-item-section>{{ due.amount }} 원</q-item-section>
           <q-item-section side>
-            <q-btn unelevated color="negative" icon="delete" style="border-radius: 8px;" @click="deleteDue(index)" />
+            <q-btn unelevated color="negative" icon="delete" style="border-radius: 8px;"
+              @click="deleteDue(due.receipt_id)" />
           </q-item-section>
         </q-item>
       </q-list>
@@ -63,28 +64,33 @@
 
           <div class="row items-center q-gutter-sm q-mb-md">
             <div>내역</div>
-            <q-input v-model="newDue.title" borderless class="bg-blue-grey-1 q-px-lg" placeholder="Ex) 1차 정기 회식" style="border-radius: 12px;" />
+            <q-input v-model="newDue.history" borderless class="bg-blue-grey-1 q-px-lg" placeholder="Ex) 1차 정기 회식"
+              style="border-radius: 12px;" />
           </div>
           <div v-if="errors.title" dense class="text-red">{{ errors.title }}</div>
 
           <div class="row items-center q-gutter-sm q-mb-md">
             <div>비고</div>
-            <q-input v-model="newDue.description" borderless class="bg-blue-grey-1 q-px-lg" placeholder="" style="border-radius: 12px;" />
+            <q-input v-model="newDue.description" borderless class="bg-blue-grey-1 q-px-lg" placeholder=""
+              style="border-radius: 12px;" />
           </div>
 
           <div class="row items-center q-gutter-sm q-mb-md">
             <div>날짜</div>
-            <q-input v-model="newDue.date" borderless class="bg-blue-grey-1 q-px-lg" placeholder="" style="border-radius: 12px;" />
+            <q-input v-model="newDue.receiptDate" borderless class="bg-blue-grey-1 q-px-lg" placeholder=""
+              style="border-radius: 12px;" />
           </div>
           <div v-if="errors.date" dense class="text-red">{{ errors.date }}</div>
 
           <div class="row items-center q-gutter-sm q-mb-md">
             <div>금액</div>
-            <q-input v-model="newDue.cost" borderless class="bg-blue-grey-1 q-px-lg" placeholder="Ex) 240000" style="border-radius: 12px;" />
+            <q-input v-model="newDue.amount" borderless class="bg-blue-grey-1 q-px-lg" placeholder="Ex) 240000"
+              style="border-radius: 12px;" />
           </div>
           <div v-if="errors.cost" dense class="text-red">{{ errors.cost }}</div>
 
-          <q-btn unelevated style="border-radius: 12px;" color="primary" class="fit q-py-md" label="추가" @click="handleAddDue" />
+          <q-btn unelevated style="border-radius: 12px;" color="primary" class="fit q-py-md" label="추가"
+            @click="handleAddDue" />
         </q-card>
       </q-dialog>
     </div>
@@ -92,21 +98,23 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { api } from 'src/boot/axios';
+import { useUserStore } from 'src/stores/user-store';
+import { ref, computed, onMounted } from 'vue';
 
 defineOptions({
   name: 'DuesPage'
 })
-
+const userStore = useUserStore()
 const dueList = ref([])
 
 const addDueModal = ref(false)
 const newDue = ref({
   type: '',
-  title: '',
+  history: '',
   description: '',
-  date: new Date().toLocaleDateString('ko-KR').slice(0,-1),
-  cost: ''
+  receiptDate: new Date().toLocaleDateString('ko-KR').slice(0, -1),
+  amount: '',
 })
 
 const errors = ref({})
@@ -114,9 +122,9 @@ const errors = ref({})
 function validateDue(due) {
   const errors = {}
   if (!due.type) errors.type = '분류를 선택해주세요.'
-  if (!due.title) errors.title = '내역을 입력해주세요.'
-  if (!due.date) errors.date = '날짜를 입력해주세요.'
-  if (!due.cost) errors.cost = '금액을 입력해주세요.'
+  if (!due.history) errors.title = '내역을 입력해주세요.'
+  if (!due.receiptDate) errors.date = '날짜를 입력해주세요.'
+  if (!due.amount) errors.cost = '금액을 입력해주세요.'
   return errors
 }
 
@@ -125,39 +133,66 @@ function handleAddDue() {
   if (Object.keys(validationErrors).length > 0) {
     errors.value = validationErrors
   } else {
-    dueList.value.push(newDue.value)
-    sortDueList()
-
+    api.post('receipt/addReceipt', {
+      ...newDue.value,
+      clubId: userStore.currentClub.club_id
+    }).then((res) => {
+      console.log(res)
+      fetchDueList()
+      sortDueList()
+    }).catch((e) => {
+      console.log(e)
+    })
     addDueModal.value = false
     newDue.value = {
       type: '',
-      title: '',
+      history: '',
       description: '',
-      date: new Date().toLocaleDateString('ko-KR').slice(0,-1),
-      cost: ''
+      receiptDate: new Date().toLocaleDateString('ko-KR').slice(0, -1),
+      amount: '',
     }
     errors.value = {}
   }
 }
 
-function deleteDue(index) {
-  dueList.value.splice(index, 1)
-  sortDueList()
+function deleteDue(id) {
+  console.log(id)
+  api.post('receipt/deleteReceipt', { clubId: userStore.currentClub.club_id, receiptId: id })
+    .then((res) => {
+      console.log(res)
+      fetchDueList()
+      sortDueList()
+    }).catch((e) => {
+      console.log(e)
+    })
 }
 
 function sortDueList() {
-  dueList.value.sort((a, b) => new Date(b.date) - new Date(a.date))
+  dueList.value.sort((a, b) => new Date(b.receiptDate) - new Date(a.receiptDate))
 }
 
 const totalCost = computed(() => {
   return dueList.value.reduce((acc, due) => {
     if (due.type === 'min') {
-      return acc - parseFloat(due.cost)
+      return acc - parseFloat(due.amount)
     } else {
-      return acc + parseFloat(due.cost)
+      return acc + parseFloat(due.amount)
     }
   }, 0)
 })
 
-const sortedDueList = computed(() => dueList.value.slice().sort((a, b) => new Date(b.date) - new Date(a.date)))
+const sortedDueList = computed(() => dueList.value.slice().sort((a, b) => new Date(b.receiptDate) - new Date(a.receiptDate)))
+
+function fetchDueList() {
+  api.post('receipt/getReceipt', { clubId: userStore.currentClub.club_id })
+    .then((res) => {
+      console.log(res.data.receiptData)
+      dueList.value = res.data.receiptData
+    }).catch((e) => {
+      console.log(e)
+    })
+}
+onMounted(() => {
+  fetchDueList()
+})
 </script>

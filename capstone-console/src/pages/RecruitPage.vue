@@ -14,8 +14,8 @@
         </q-btn>
       </q-card>
 
-      <q-card flat v-for="application in applicationList" :key="application.application_id" class="column bg-primary"
-        style="width: 340px; padding-left: 10px; border-radius: 10px">
+      <q-card flat v-for="application in applicationList" :key="application.application_id" class="column bg-primary cursor-pointer"
+        style="width: 340px; padding-left: 10px; border-radius: 10px" @click="$router.push(`/console/recruit/viewforms/${application.application_id}`)">
         <div class="column justify-between bg-white q-pa-md" style="
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
@@ -55,7 +55,7 @@
     <q-dialog v-model="shareDialog">
       <q-card class="q-pa-md" style="border-radius: 12px;">
         <q-card-section class="row q-gutter-md items-center">
-          <div ref="shareLinkRef" class="col" style="overflow: auto;">http://localhost:9000/recruit/form/{{ shareLink }}</div>
+          <div ref="shareLinkRef" class="col" style="overflow: auto;">https://capstone-37552.web.app//recruit/form/{{ shareLink }}</div>
 
           <q-icon name="content_copy" class="cursor-pointer col-1" @click="copyLink" />
         </q-card-section>

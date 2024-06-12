@@ -23,6 +23,7 @@ const routes = [
       { path: 'event', component: () => import('pages/CalendarPage.vue') },
       { path: 'dues', component: () => import('pages/DuesPage.vue') },
       { path: 'recruit/createform', component: () => import('pages/CreateFormPage.vue') },
+      { path: 'recruit/viewforms/:fid', component: () => import('pages/FormListPage.vue') },
     ]
   },
 

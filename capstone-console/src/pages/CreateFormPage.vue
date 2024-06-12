@@ -4,7 +4,7 @@
       <q-spinner size="50px" color="primary" />
     </q-inner-loading>
     <div v-if="!loadingState" class="text-bold text-h5">부원 신청서 작성</div>
-    <q-card v-if="!loadingState" flat style="border-radius: 12px; max-width: 900px;" class="q-pa-md q-mt-md column">
+    <q-card v-if="!loadingState" flat style="border-radius: 12px;" class="q-pa-md q-mt-md column">
       <div class="text-bold q-ml-sm q-mb-sm q-mt-md">
         신청서 제목
       </div>
@@ -19,6 +19,13 @@
       <q-date landscape :locale="locale" style="border-radius: 12px;" range v-model="form.dateRange"
         :error="!!errors.dateRange" />
       <div v-if="errors.dateRange" class="text-red q-ml-sm">{{ errors.dateRange }}</div>
+
+      <div class="text-bold q-ml-sm q-mb-sm q-mt-md">
+        면접 기간 : {{ form.interviewDateRange.from }} ~ {{ form.interviewDateRange.to }}
+      </div>
+      <q-date landscape :locale="locale" style="border-radius: 12px;" range v-model="form.interviewDateRange"
+        :error="!!errors.interviewDateRange" />
+      <div v-if="errors.interviewDateRange" class="text-red q-ml-sm">{{ errors.interviewDateRange }}</div>
 
       <div v-for="question in form.questionList" :key="question">
         <div class="text-bold q-ml-sm q-mb-sm q-mt-md">
@@ -75,6 +82,7 @@ const newQuestion = ref("")
 const form = ref({
   title: "",
   dateRange: { from: '', to: '' },
+  interviewDateRange: { from: '', to: '' },
   questionList: ["이름을 입력해주세요", "학교를 입력해주세요", "학과를 입력해주세요", "학번을 입력해주세요", "전화번호를 입력해주세요", "이메일을 입력해주세요"]
 })
 
@@ -95,6 +103,9 @@ async function handleAddForm() {
 
   if (!form.value.dateRange.from || !form.value.dateRange.to) {
     errors.value.dateRange = '모집 기간을 입력해주세요.'
+  }
+  if (!form.value.interviewDateRange.from || !form.value.interviewDateRange.to) {
+    errors.value.interviewDateRange = '면접 기간을 입력해주세요.'
   }
 
   if (Object.keys(errors.value).length === 0) {
