@@ -41,7 +41,8 @@ const $route = useRoute();
 
 function handleKakaoLogin() {
   Kakao.Auth.authorize({
-    redirectUri: "https://capstone-37552.web.app/oauth",
+    // redirectUri: "https://capstone-37552.web.app/oauth",
+    redirectUri: "http://localhost:9000/oauth",
     prompts: 'login'
   });
 }
