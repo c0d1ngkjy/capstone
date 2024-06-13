@@ -31,8 +31,8 @@
 
     <!-- Left Drawer -->
     <q-drawer v-model="leftDrawerOpen" side="left" bordered>
-      <div class="row items-center q-gutter-x-sm q-pa-sm q-pl-lg">
-        <div style="width: 50px; height: 50px" class="flex flex-center">
+      <div class="row items-center q-gutter-x-sm q-pa-sm q-pl-lg cursor-pointer" @click="$router.push('/myclubs')">
+        <div style="width: 50px; height: 50px" class="flex flex-center" >
           <img width="40" src="~assets/logo.svg" style="
               filter: invert(50%) sepia(35%) saturate(7492%) hue-rotate(222deg)
                 brightness(101%) contrast(102%);
@@ -84,7 +84,7 @@
 
     <!-- Page Content -->
     <q-page-container>
-      <router-view />
+      <router-view :key="viewKey" />
     </q-page-container>
   </q-layout>
 </template>
@@ -109,6 +109,7 @@ export default {
     const clubOptions = ref([]);
     const currentClub = ref({});
     const currentNav = ref("list");
+    const viewKey = ref(0);
 
     const navs = ref([
       { name: "부원 목록", iconName: "list", link: "list" },
@@ -125,12 +126,13 @@ export default {
     watch(currentClub, (newValue, oldValue) => {
       userStore.setCurrentClub(newValue);
       console.log('Current club changed:', newValue);
+      viewKey.value += 1; // Increment viewKey to force re-render
     });
 
     onMounted(() => {
       fetchClubList();
       currentNav.value = $route.path.split("/")[2];
-      userData.value = userStore.userData
+      userData.value = userStore.userData;
     });
 
     function fetchClubList() {
@@ -157,7 +159,8 @@ export default {
       navs,
       currentNav,
       handleLogout,
-      userData
+      userData,
+      viewKey
     };
   },
 };
