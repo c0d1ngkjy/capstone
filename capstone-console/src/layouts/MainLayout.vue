@@ -51,10 +51,11 @@
 
         <q-select class="col" borderless v-model="currentClub" :options="clubOptions" option-label="name">
           <template v-slot:selected>
-            <div>
+            <div class="full-width">
               {{ currentClub.name }}
             </div>
-            <div class="text-caption text-grey-7" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+            <div class="text-caption text-grey-7"
+              style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
               {{ currentClub.description }}
             </div>
           </template>

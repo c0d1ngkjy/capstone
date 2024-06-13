@@ -168,8 +168,9 @@ async function submit() {
             message: '동아리 생성 완료',
             color: 'positive'
           })
-          console.log(imgRes)
+          console.log(imgRes.clubData)
           userStore.setCurrentClub(imgRes.clubData)
+
           $router.push('/console/list')
         } else {
           $q.notify({
