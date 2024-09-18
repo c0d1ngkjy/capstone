@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.16.4",
-    "axios": "^1.2.1",
+    "axios": "^1.7.4",
     "firebase": "^10.12.2",
     "jdenticon": "^3.3.0",
     "pinia": "^2.0.11",
